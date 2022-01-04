@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "commonjs",
+        "outDir": "dist",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "typeRoots": [
+            "types",
+            "node_modules/@types"
+        ],
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "alwaysStrict": true,
+        "strictNullChecks": true,
+        "noUnusedLocals": false,
+        "allowJs": true,
+        "sourceRoot": "./src/",
+        "skipLibCheck": true,
+        "lib": [
+            "webworker",
+            "es6",
+            "dom",
+            "esnext",
+            "scripthost"
+        ]
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "surfy-api-nodejs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:surfypro/surfy-api-nodejs.git",
+  "author": "<pouyajoon@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "17.0.5",
+    "axios": "^0.24.0",
+    "dotenv": "10.0.0",
+    "nodemon": "2.0.15",
+    "typescript": "4.5.4"
+  },
+  "scripts": {
+    "dev:build": "./node_modules/.bin/tsc --watch",
+    "dev:start": "./node_modules/.bin/nodemon dist/index.js --delay 2"
+  }
+}
