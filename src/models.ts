@@ -9,15 +9,6 @@ export interface IApiAuthorizeResult {
     token: string;
 }
 
-export interface IJwtSecurity {
-    authorization: string;
-    connection: 'api';
-}
-export interface ITenantQuery {
-    tenant: string | null;
-    security: IJwtSecurity;
-}
-
-export interface IListEntitiesBody extends ITenantQuery {
+export interface IListEntitiesBody {
     queryNode: JupQueryNode;
 }
