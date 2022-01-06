@@ -7,8 +7,6 @@ surfy api nodejs
 - create an api user https://app.surfy.pro/tenant/apiUsers/views/list
 - associate your api user to a role inside surfy
 
-
-
 # run the code
 
 create a .env file
