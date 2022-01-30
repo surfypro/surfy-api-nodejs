@@ -2,10 +2,15 @@
 surfy api nodejs
 
 
+# api reference
+
+https://app.surfy.pro/apidocs/index.html
+
 # setup the api credentials 
 
 - create an api user https://app.surfy.pro/tenant/apiUsers/views/list
 - associate your api user to a role inside surfy
+
 
 # run the code
 

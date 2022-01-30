@@ -8,7 +8,8 @@ dotenv.config();
 async function getBuildings() {
     try {
         // const host = 'app-alpha.surfy.pro';
-        const host = 'localhost';
+        // const host = 'localhost';
+        const host = 'app.surfy.pro';
         const clientId = process.env.API_CLIENT_ID; //client id is the tenant
         const clientSecret = process.env.API_CLIENT_SECRET; // generated from the api section on https://app.surfy.pro/
 
@@ -28,7 +29,6 @@ async function getBuildings() {
             throw new Error('token is missing in reponse');
         }
         const authorization = a.data.token;
-
         const headers = {
             authorization: `Bearer ${authorization}`,
             'x-tenant': clientId
@@ -40,7 +40,7 @@ async function getBuildings() {
         }, config);
         console.log('buildings', b.data);
     } catch (err) {
-        console.error(err.response?.status, err.response?.data);
+        console.error(err, err.response?.status, err.response?.data);
     }
 }
 
