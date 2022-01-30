@@ -8,7 +8,8 @@ https://app.surfy.pro/apidocs/index.html
 
 # video
 
-[![Surfy API v1](https://i3.ytimg.com/vi/2My2O-EByqw/maxresdefault.jpg)](https://www.youtube.com/watch?v=2My2O-EByqw
+[![Surfy API v1](https://i3.ytimg.com/vi/2My2O-EByqw/maxresdefault.jpg)](https://www.youtube.com/watch?v=2My2O-EByqw)
+
 
 
 # setup the api credentials 
