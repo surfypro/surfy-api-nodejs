@@ -33,7 +33,6 @@ async function getBuildings() {
             authorization: `Bearer ${authorization}`,
             'x-tenant': clientId
         };
-
         const config = { headers };
         const b = await instance.post<IListEntitiesBody, AxiosResponse<unknown>>(`https://${host}/api/v1/data/entities`, {
             queryNode: { name: 'building', _: ['id', 'name'] }
