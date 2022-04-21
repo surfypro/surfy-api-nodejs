@@ -39,9 +39,6 @@ export namespace QueryNodes {
     }
 
 
-
-
-
     export type JupUiOptionScalarProperties = 'id' | 'name' | 'createdAt' | 'updatedAt' | 'externalId';
     export type JupUiOptionHasManyProperties = JupRoleToJupUiOptions
     export type JupUiOptionProperties = JupUiOptionScalarProperties | JupUiOptionHasManyProperties
@@ -50,9 +47,6 @@ export namespace QueryNodes {
         name: 'jupUiOption',
         _: JupUiOptionProperties[]
     }
-
-
-
 
 
     export type JupUiOperationScalarProperties = 'id' | 'name' | 'createdAt' | 'updatedAt' | 'externalId';
