@@ -10,8 +10,8 @@ dotenv.config();
 async function getBuildings() {
     try {
         // const host = 'app-alpha.surfy.pro';
-        const host = 'localhost';
-        // const host = 'app.surfy.pro';
+        // const host = 'localhost';
+        const host = 'app.surfy.pro';
         const clientId = process.env.API_CLIENT_ID; //client id is the tenant
         const clientSecret = process.env.API_CLIENT_SECRET; // generated from the api section on https://app.surfy.pro/
 
@@ -25,6 +25,7 @@ async function getBuildings() {
             })
         });
         const a = await instance.post<IApiAuthorizeBody, AxiosResponse<IApiAuthorizeResult>>(`https://${host}/api/v1/authentication/token`, { clientId, clientSecret });
+
         if (!a.data.token) {
             console.error(a.status, a.statusText)
             throw new Error('token is missing in reponse');
@@ -57,13 +58,12 @@ async function getBuildings() {
                     ]
                 }]
         };
-
         const b = await instance.post<IListEntitiesBody, AxiosResponse<unknown>>(`https://${host}/api/v1/data/entities`, {
             queryNode: qnBuilding
         }, config);
         console.log('buildings', b.data);
     } catch (err) {
-        // console.error(err, err.response?.status, err.response?.data);
+        console.error(err.response?.status, err.response?.data || err.response || err);
     }
 }
 

@@ -946,8 +946,6 @@ export namespace QueryNodes {
         _: RoomTypeFloorProperties[]
     }
 
-
-
     export type RoomTypeBuildingScalarProperties = 'id' | 'roomsArea' | 'roomsCount' | 'workplacesCount' | 'workplacesRatio' | 'peopleCount' | 'peopleRatio' | 'occupancyRate' | 'expansionRatio' | 'freeWorkplacesCount' | 'flexWorkplacesCount' | 'sharedWorkplacesCount' | 'sharedWorkplacesRatio' | 'transitWorkplacesCount' | 'createdAt' | 'updatedAt' | 'externalId' | 'roomTypeId' | 'buildingId' | 'companyId';
     export type RoomTypeBuildingBelongsToProperties = RoomType | Building | Company;
     export type RoomTypeBuildingProperties = RoomTypeBuildingScalarProperties | RoomTypeBuildingBelongsToProperties
