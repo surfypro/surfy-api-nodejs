@@ -820,7 +820,7 @@ export namespace QueryNodes {
 
 
 
-    export type WorkplaceTypeScalarProperties = 'id' | 'name' | 'zIndex' | 'color' | 'createdAt' | 'updatedAt' | 'externalId' | 'companyId';
+    export type WorkplaceTypeScalarProperties = 'id' | 'center' | 'size' | 'name' | 'zIndex' | 'color' | 'createdAt' | 'updatedAt' | 'externalId' | 'companyId';
     export type WorkplaceTypeBelongsToProperties = Company;
     export type WorkplaceTypeHasManyProperties = WorkplaceTypeItemTypes | Workplaces
     export type WorkplaceTypeProperties = WorkplaceTypeScalarProperties | WorkplaceTypeBelongsToProperties | WorkplaceTypeHasManyProperties
