@@ -1,9 +1,10 @@
 import { createFilter } from "./helper";
 import { IEntity, IPaginationList, JupQueryNode } from "./jup.models";
+import { FetchEntitiesFunction } from "./models";
 import { QueryNodes } from "./schema/queryNodes.generated";
 import { Surfy } from "./schema/surfy.models.generated";
 
-type FetchEntitiesFunction = <T extends IEntity>(queryNode: JupQueryNode) => Promise<T[] | undefined>;
+
 
 export function fetchMainBuildings(fetchEntities: FetchEntitiesFunction) {
     const qnBuilding: QueryNodes.Building = {
@@ -183,6 +184,21 @@ export function fetchItemsForBuildingIds(fetchEntities: FetchEntitiesFunction, b
     return fetchEntities<Surfy.Item>(itemsQn)
 }
 
+
+export function getPeopleWorkplaces(fetchEntities: FetchEntitiesFunction) {
+    const qn: QueryNodes.Person = {
+        name: 'person',
+        _: ['id', {
+            name: 'workplaceAffectations', _: ['id', {
+                name: 'workplace', _: ['id', 'name', {
+                    name: 'room', _: ['id', 'name', 'floorId']
+                }]
+            }]
+        }],
+    }
+    return fetchEntities<Surfy.Person>(qn);
+}
+
 export function fetchWorkplacesForBuildingIds(fetchEntities: FetchEntitiesFunction, buildingIds: number[]) {
     const workplacesQn: QueryNodes.Workplace = {
         name: 'workplace',
@@ -216,7 +232,6 @@ export function fetchPeople(fetchEntities: FetchEntitiesFunction) {
 }
 
 export function fetchOrganizations(fetchEntities: FetchEntitiesFunction) {
-
     const organizationQn: QueryNodes.Organization = {
         name: 'organization',
         _: ['id', 'name', 'code', 'organizationId']

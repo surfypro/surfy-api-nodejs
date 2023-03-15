@@ -1,13 +1,14 @@
 import * as dotenv from "dotenv";
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { IApiAuthorizeBody, IApiAuthorizeResult, IListEntitiesBody } from "./models";
+import { IApiAuthorizeBody, IApiAuthorizeResult, IBulkCreateEntitiesBody, IBulkCreateEntitiesResult, IListEntitiesBody } from "./models";
 import https from 'https';
 import { QueryNodes } from "./schema/queryNodes.generated";
 import { createFilter } from "./helper";
 import { saveFloorImage } from "./images/exportFloorImage";
 import { IEntity, IPaginationList, JupQueryNode } from "./jup.models";
 import { Surfy } from "./schema/surfy.models.generated";
-import { fetchAllFloorByLevel, fetchBuildingsWithRoomsAndWorkpaces, fetchFloors2, fetchFloorsAndMapRatioForBuildingIds, fetchItems, fetchItemsForBuildingIds, fetchItemTypes, fetchMainBuildings, fetchMainBuildingWithFloors, fetchMapScaleRatios, fetchOrganizations, fetchPeople, fetchRoomTypes, fetchRoomWithCostCenterId, fetchWorkplaceAffectationsForBuildingIds, fetchWorkplacesForBuildingIds, fetchWorkplaceTypes, fetchWorkplaceTypes2 } from "./examples";
+import { fetchAllFloorByLevel, fetchBuildingsWithRoomsAndWorkpaces, fetchFloors2, fetchFloorsAndMapRatioForBuildingIds, fetchItems, fetchItemsForBuildingIds, fetchItemTypes, fetchMainBuildings, fetchMainBuildingWithFloors, fetchMapScaleRatios, fetchOrganizations, fetchPeople, fetchRoomTypes, fetchRoomWithCostCenterId, fetchWorkplaceAffectationsForBuildingIds, fetchWorkplacesForBuildingIds, fetchWorkplaceTypes, fetchWorkplaceTypes2, getPeopleWorkplaces } from "./examples";
+import { createPeople } from "./bulk/examples";
 
 dotenv.config();
 
@@ -56,28 +57,37 @@ async function getBuildings() {
             return r.data.entities;
         }
 
+        async function createBulk<T extends IEntity>(b: IBulkCreateEntitiesBody<T>) {
+            console.log(JSON.stringify(b))
+            const r = await instance.post<IBulkCreateEntitiesResult<T>>(`https://${host}/api/v1/data/bulk/create`, b, config);
+            console.log(r.data)
+            return r.data;
+        }
 
-        fetchWorkplaceTypes(fetchEntities);
-        fetchBuildingsWithRoomsAndWorkpaces(fetchEntities, [123]);
-        fetchAllFloorByLevel(fetchEntities, 0);
+        // createPeople(createBulk);
+        getPeopleWorkplaces(fetchEntities);
 
-        fetchRoomTypes(fetchEntities)
-        fetchRoomWithCostCenterId(fetchEntities)
-        fetchItems(fetchEntities)
-        fetchMainBuildingWithFloors(fetchEntities)
-        fetchFloors2(fetchEntities)
-        fetchMapScaleRatios(fetchEntities)
-        fetchItemTypes(fetchEntities)
-        fetchPeople(fetchEntities)
-        fetchOrganizations(fetchEntities)
-        fetchWorkplaceTypes2(fetchEntities)
+        // fetchWorkplaceTypes(fetchEntities);
+        // fetchBuildingsWithRoomsAndWorkpaces(fetchEntities, [123]);
+        // fetchAllFloorByLevel(fetchEntities, 0);
 
-        const buildings = await fetchMainBuildings(fetchEntities);
-        const buildingIds = buildings?.map(b => b.id) || [];
-        fetchWorkplaceAffectationsForBuildingIds(fetchEntities, buildingIds)
-        fetchFloorsAndMapRatioForBuildingIds(fetchEntities, buildingIds)
-        fetchItemsForBuildingIds(fetchEntities, buildingIds)
-        fetchWorkplacesForBuildingIds(fetchEntities, buildingIds)
+        // fetchRoomTypes(fetchEntities)
+        // fetchRoomWithCostCenterId(fetchEntities)
+        // fetchItems(fetchEntities)
+        // fetchMainBuildingWithFloors(fetchEntities)
+        // fetchFloors2(fetchEntities)
+        // fetchMapScaleRatios(fetchEntities)
+        // fetchItemTypes(fetchEntities)
+        // fetchPeople(fetchEntities)
+        // fetchOrganizations(fetchEntities)
+        // fetchWorkplaceTypes2(fetchEntities)
+
+        // const buildings = await fetchMainBuildings(fetchEntities);
+        // const buildingIds = buildings?.map(b => b.id) || [];
+        // fetchWorkplaceAffectationsForBuildingIds(fetchEntities, buildingIds)
+        // fetchFloorsAndMapRatioForBuildingIds(fetchEntities, buildingIds)
+        // fetchItemsForBuildingIds(fetchEntities, buildingIds)
+        // fetchWorkplacesForBuildingIds(fetchEntities, buildingIds)
 
 
     } catch (err) {
