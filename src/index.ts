@@ -18,8 +18,8 @@ dotenv.config();
 async function getBuildings() {
     try {
         // const host = 'app-alpha.surfy.pro';
-        const host = 'localhost';
-        // const host = 'app.surfy.pro';
+        // const host = 'localhost';
+        const host = 'app.surfy.pro';
         const clientId = process.env.API_CLIENT_ID; //client id is the tenant
         const clientSecret = process.env.API_CLIENT_SECRET; // generated from the api section on https://app.surfy.pro/
 
