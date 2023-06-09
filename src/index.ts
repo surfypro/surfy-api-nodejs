@@ -18,8 +18,8 @@ dotenv.config();
 async function getBuildings() {
     try {
         // const host = 'app-alpha.surfy.pro';
-        // const host = 'localhost';
-        const host = 'app.surfy.pro';
+        const host = 'localhost';
+        // const host = 'app.surfy.pro';
         const clientId = process.env.API_CLIENT_ID; //client id is the tenant
         const clientSecret = process.env.API_CLIENT_SECRET; // generated from the api section on https://app.surfy.pro/
 
@@ -52,9 +52,13 @@ async function getBuildings() {
         async function fetchEntities<T extends IEntity>(queryNode: JupQueryNode) {
             const body = { queryNode };
             console.log(JSON.stringify(body))
-            const r = await instance.post<IPaginationList<T>>(`https://${host}/api/v1/data/entities`, body, config);;
-            console.log(r.data.entities)
-            return r.data.entities;
+            try {
+                const r = await instance.post<IPaginationList<T>>(`https://${host}/api/v1/data/entities`, body, config);;
+                console.log(r.data.entities)
+                return r.data.entities;
+            } catch (err) {
+                console.error(err?.data?.message || err);
+            }
         }
 
         async function createBulk<T extends IEntity>(b: IBulkCreateEntitiesBody<T>) {
@@ -63,7 +67,6 @@ async function getBuildings() {
             console.log(r.data)
             return r.data;
         }
-
         // createPeople(createBulk);
         getPeopleWorkplaces(fetchEntities);
 

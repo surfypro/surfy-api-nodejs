@@ -186,7 +186,7 @@ export function fetchItemsForBuildingIds(fetchEntities: FetchEntitiesFunction, b
 
 
 export function getPeopleWorkplaces(fetchEntities: FetchEntitiesFunction) {
-    const qn: QueryNodes.Person = {
+    const qn: any = {
         name: 'person',
         _: ['id', {
             name: 'workplaceAffectations', _: ['id', {
