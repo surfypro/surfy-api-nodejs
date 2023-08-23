@@ -186,15 +186,28 @@ export function fetchItemsForBuildingIds(fetchEntities: FetchEntitiesFunction, b
 
 
 export function getPeopleWorkplaces(fetchEntities: FetchEntitiesFunction) {
-    const qn: any = {
+    const qn: QueryNodes.Person = {
         name: 'person',
+        required: true,
         _: ['id', {
-            name: 'workplaceAffectations', _: ['id', {
-                name: 'workplace', _: ['id', 'name', {
-                    name: 'room', _: ['id', 'name', 'floorId']
+            name: 'workplaceAffectations', required: true, _: ['id', {
+                name: 'workplace', required: true, _: ['id', 'name', {
+                    name: 'room',
+                    required: true,
+                    _: ['id', 'name', 'floorId', {
+                        name: 'floor',
+                        required: true,
+                        _: [
+                            'id', {
+                                name: 'building',
+                                required: true,
+                                _: ['id', 'buildingId'], filters: [createFilter('eq', 'buildingId', null)]
+                            }
+                        ]
+                    }]
                 }]
-            }]
-        }],
+            }],
+        }]
     }
     return fetchEntities<Surfy.Person>(qn);
 }

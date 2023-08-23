@@ -68,12 +68,12 @@ async function getBuildings() {
             return r.data;
         }
         // createPeople(createBulk);
-        getPeopleWorkplaces(fetchEntities);
+        const people = await getPeopleWorkplaces(fetchEntities);
+        console.log('PEOPLE', people?.filter(p => [100296, 100297].includes(p.id)));
 
         // fetchWorkplaceTypes(fetchEntities);
         // fetchBuildingsWithRoomsAndWorkpaces(fetchEntities, [123]);
         // fetchAllFloorByLevel(fetchEntities, 0);
-
         // fetchRoomTypes(fetchEntities)
         // fetchRoomWithCostCenterId(fetchEntities)
         // fetchItems(fetchEntities)
