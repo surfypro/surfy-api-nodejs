@@ -69,7 +69,6 @@ async function getBuildings() {
         }
         // createPeople(createBulk);
         const people = await getPeopleWorkplaces(fetchEntities);
-        console.log('PEOPLE', people?.filter(p => [100296, 100297].includes(p.id)));
 
         // fetchWorkplaceTypes(fetchEntities);
         // fetchBuildingsWithRoomsAndWorkpaces(fetchEntities, [123]);
