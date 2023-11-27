@@ -1,8 +1,7 @@
-import { createFilter } from "./helper";
-import { IEntity, IPaginationList, JupQueryNode } from "./jup.models";
-import { FetchEntitiesFunction } from "./models";
-import { QueryNodes } from "./schema/queryNodes.generated";
-import { Surfy } from "./schema/surfy.models.generated";
+import { createFilter } from "../helper";
+import { FetchEntitiesFunction } from "../models";
+import { QueryNodes } from "../schema/queryNodes.generated";
+import { Surfy } from "../schema/surfy.models.generated";
 
 export function fetchMainBuildings(fetchEntities: FetchEntitiesFunction) {
     const qnBuilding: QueryNodes.Building = {
@@ -255,7 +254,7 @@ export function getOrganization(fetchEntities: FetchEntitiesFunction) {
         name: 'organization',
         _: ['id', 'name', 'code', 'organizationId']
     };
-    fetchEntities<Surfy.RoomAffectation>(qn);
+    return fetchEntities<Surfy.Organization>(qn);
 }
 
 export function getPeopleRoomAffectation(fetchEntities: FetchEntitiesFunction) {
@@ -267,7 +266,7 @@ export function getPeopleRoomAffectation(fetchEntities: FetchEntitiesFunction) {
             ]
         }]
     };
-    fetchEntities<Surfy.RoomAffectation>(qn);
+    return fetchEntities<Surfy.RoomAffectation>(qn);
 }
 
 export function getPeopleWorkplaces(fetchEntities: FetchEntitiesFunction) {

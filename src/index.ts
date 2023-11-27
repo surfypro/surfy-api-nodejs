@@ -1,28 +1,27 @@
 import * as dotenv from "dotenv";
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { IApiAuthorizeBody, IApiAuthorizeResult, IBulkCreateEntitiesBody, IBulkCreateEntitiesResult, IListEntitiesBody } from "./models";
+import axios, { AxiosResponse } from 'axios';
+import { IApiAuthorizeBody, IApiAuthorizeResult, IBulkCreateEntitiesBody, IBulkCreateEntitiesResult } from "./models";
 import https from 'https';
-import { QueryNodes } from "./schema/queryNodes.generated";
-import { createFilter } from "./helper";
-import { saveFloorImage } from "./images/exportFloorImage";
 import { IEntity, IPaginationList, JupQueryNode } from "./jup.models";
+import { getOrganization } from "./examples/examples";
+import { IApiHelper } from "./api.helper.models";
+import { updateEntity } from "./examples/update";
 import { Surfy } from "./schema/surfy.models.generated";
-import { fetchAllFloorByLevel, fetchBuildingStructure, fetchBuildingsWithRoomsAndWorkpaces, fetchCostCenter, fetchFloors2, fetchFloorsAndMapRatioForBuildingIds, fetchFloorsStructure, fetchItems, fetchItemsForBuildingIds, fetchItemTypes, fetchMainBuildings, fetchMainBuildingWithFloors, fetchMapScaleRatios, fetchOrganizations, fetchPeople, fetchRoomsStructure, fetchRoomTypes, fetchRoomWithCostCenterId, fetchWorkplaceAffectationsForBuildingIds, fetchWorkplacesForBuildingIds, fetchWorkplaceTypes, fetchWorkplaceTypes2, getOrganization, getPeopleRoomAffectation, getPeopleWorkplaceAffectation, getPeopleWorkplaces } from "./examples";
-import { createPeople } from "./bulk/examples";
+import colors from "colors";
+colors.setTheme({
+    info: "green"
+});
+
 
 dotenv.config();
 
-
-
-
-async function getBuildings() {
+async function play() {
     try {
         // const host = 'app-alpha.surfy.pro';
-        // const host = 'localhost';
-        const host = 'app.surfy.pro';
+        const host = 'localhost';
+        // const host = 'app.surfy.pro';
         const clientId = process.env.API_CLIENT_ID; //client id is the tenant
         const clientSecret = process.env.API_CLIENT_SECRET; // generated from the api section on https://app.surfy.pro/
-
 
         if (!clientId || !clientSecret) {
             throw new Error('clientId or clientSecret not set');
@@ -49,15 +48,21 @@ async function getBuildings() {
 
         const config = { headers };
 
+        const apiHelper: IApiHelper = {
+            instance,
+            host,
+            config
+        }
+
         async function fetchEntities<T extends IEntity>(queryNode: JupQueryNode) {
             const body = { queryNode };
-            console.log(JSON.stringify(body))
+            console.log('BODY ENTITIES'.green, JSON.stringify(body))
             try {
                 const r = await instance.post<IPaginationList<T>>(`https://${host}/api/v1/data/entities`, body, config);;
                 console.log(r.data.entities)
                 return r.data.entities;
             } catch (err) {
-                console.error(err?.data?.message || err);
+                console.error('ERROR'.red, err.response.status, err.response?.data?.message || err);
             }
         }
 
@@ -67,6 +72,7 @@ async function getBuildings() {
             console.log(r.data)
             return r.data;
         }
+
         // createPeople(createBulk);
         // const people = await getPeopleWorkplaces(fetchEntities);
 
@@ -86,10 +92,20 @@ async function getBuildings() {
         // fetchFloorsStructure(fetchEntities);
         // fetchRoomsStructure(fetchEntities);
 
-        getPeopleRoomAffectation(fetchEntities);
-        getPeopleWorkplaceAffectation(fetchEntities);
-        getOrganization(fetchEntities);
+        // getPeopleRoomAffectation(fetchEntities);
+        // getPeopleWorkplaceAffectation(fetchEntities);
 
+        const organizations = await getOrganization(fetchEntities);
+        if (organizations && organizations[0]) {
+            const o = organizations[0];
+            console.log(o);
+
+            await updateEntity<Surfy.Organization>(apiHelper)({
+                objectTypeName: 'organization',
+                id: o.id,
+                variables: { ...o, name: 'test name updated' }
+            })
+        }
         // fetchOrganizations(fetchEntities)
         // fetchWorkplaceTypes2(fetchEntities)
 
@@ -106,6 +122,6 @@ async function getBuildings() {
     }
 }
 
-getBuildings();
+play();
 
 

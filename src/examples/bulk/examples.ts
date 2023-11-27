@@ -1,5 +1,5 @@
-import { BulkCreateFunction, FetchEntitiesFunction, IBulkCreateEntitiesBody } from "../models";
-import { Surfy } from "../schema/surfy.models.generated";
+import { BulkCreateFunction, FetchEntitiesFunction, IBulkCreateEntitiesBody } from "../../models";
+import { Surfy } from "../../schema/surfy.models.generated";
 
 export function createPeople(createBulk: BulkCreateFunction) {
     const peopleBody: IBulkCreateEntitiesBody<Surfy.Person> = {
