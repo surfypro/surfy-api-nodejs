@@ -4,8 +4,6 @@ import { FetchEntitiesFunction } from "./models";
 import { QueryNodes } from "./schema/queryNodes.generated";
 import { Surfy } from "./schema/surfy.models.generated";
 
-
-
 export function fetchMainBuildings(fetchEntities: FetchEntitiesFunction) {
     const qnBuilding: QueryNodes.Building = {
         name: 'building', _: ['id', 'name', 'address',
@@ -36,6 +34,51 @@ export function fetchWorkplaceTypes(fetchEntities: FetchEntitiesFunction) {
             }
         ]
     }
+}
+
+
+export function fetchFloorsStructure(fetchEntities: FetchEntitiesFunction) {
+    const qnF: QueryNodes.Floor = {
+        name: 'floor',
+        filters: [createFilter('in', 'buildingId', [2718])],
+        _: ['id', 'name', 'level']
+    };
+    return fetchEntities<Surfy.Floor>(qnF);
+}
+
+export function fetchRoomsStructure(fetchEntities: FetchEntitiesFunction) {
+    const qnF: QueryNodes.Room = {
+        name: 'room',
+        filters: [createFilter('in', 'floorId', [])],
+        _: ['id', 'name', 'roomTypeId']
+    };
+    return fetchEntities<Surfy.Room>(qnF);
+}
+
+
+
+export function fetchBuildingStructure(fetchEntities: FetchEntitiesFunction) {
+    const qnB: QueryNodes.Building = {
+        name: 'building',
+        filters: [createFilter('eq', 'buildingId', null)],
+        _: ['id', 'name',
+            // {
+            //     name: 'floors',
+            //     _: ['id', 'name', 'level',
+            //         {
+            //             name: 'rooms', _: [
+            //                 'id', 'name', 'roomTypeId',
+            //                 { name: 'roomType', _: ['id', 'name'] }
+            //                 // {
+            //                 //     name: 'roomPointRooms', _: ['id', 'sortIndex', { name: 'roomPoint', _: ['id', 'x', 'y'] }]
+            //                 // },
+            //                 // { name: 'workplaces', _: ['id', 'position', 'rotation', 'workplaceTypeId'] }]
+            //             ]
+            //         }]
+            // }
+        ]
+    };
+    return fetchEntities<Surfy.Building>(qnB);
 }
 
 export function fetchBuildingsWithRoomsAndWorkpaces(fetchEntities: FetchEntitiesFunction, buildingIds: number[]) {
@@ -185,29 +228,72 @@ export function fetchItemsForBuildingIds(fetchEntities: FetchEntitiesFunction, b
 }
 
 
+export function getPeople(fetchEntities: FetchEntitiesFunction) {
+    const qn: QueryNodes.Person = {
+        name: 'person',
+        _: ['id', 'firstname', 'lastname', 'organizationId', { name: 'workplaceAffectations', _: ['id', { name: 'workplace', _: ['id', 'name', 'roomId'] }] }, { name: 'organization', _: ['id', 'name'] }]
+    }
+    return fetchEntities<Surfy.Person>(qn);
+}
+
+
+export function getPeopleWorkplaceAffectation(fetchEntities: FetchEntitiesFunction) {
+    const qn: QueryNodes.WorkplaceAffectation = {
+        name: 'workplaceAffectation',
+        _: ['id', { name: 'workplace', _: ['id', 'name'] }, {
+            name: 'person', _: [
+                'id', 'email', 'firstname', 'lastname', 'costCenterId'
+            ]
+        }]
+    };
+    fetchEntities<Surfy.WorkplaceAffectation>(qn);
+}
+
+
+export function getOrganization(fetchEntities: FetchEntitiesFunction) {
+    const qn: QueryNodes.Organization = {
+        name: 'organization',
+        _: ['id', 'name', 'code', 'organizationId']
+    };
+    fetchEntities<Surfy.RoomAffectation>(qn);
+}
+
+export function getPeopleRoomAffectation(fetchEntities: FetchEntitiesFunction) {
+    const qn: QueryNodes.RoomAffectation = {
+        name: 'roomAffectation',
+        _: ['id', { name: 'room', _: ['name'] }, {
+            name: 'person', _: [
+                'id', 'email', 'firstname', 'lastname', 'costCenterId'
+            ]
+        }]
+    };
+    fetchEntities<Surfy.RoomAffectation>(qn);
+}
+
 export function getPeopleWorkplaces(fetchEntities: FetchEntitiesFunction) {
     const qn: QueryNodes.Person = {
         name: 'person',
         required: true,
-        _: ['id', {
-            name: 'workplaceAffectations', required: true, _: ['id', {
-                name: 'workplace', required: true, _: ['id', 'name', {
-                    name: 'room',
-                    required: true,
-                    _: ['id', 'name', 'floorId', {
-                        name: 'floor',
+        _: ['id', 'firstname',
+            {
+                name: 'workplaceAffectations', required: true, _: ['id', {
+                    name: 'workplace', required: true, _: ['id', 'name', {
+                        name: 'room',
                         required: true,
-                        _: [
-                            'id', {
-                                name: 'building',
-                                required: true,
-                                _: ['id', 'buildingId'], filters: [createFilter('eq', 'buildingId', null)]
-                            }
-                        ]
+                        _: ['id', 'name', 'floorId', {
+                            name: 'floor',
+                            required: true,
+                            _: [
+                                'id', {
+                                    name: 'building',
+                                    required: true,
+                                    _: ['id', 'buildingId'], filters: [createFilter('eq', 'buildingId', null)]
+                                }
+                            ]
+                        }]
                     }]
-                }]
-            }],
-        }]
+                }],
+            }]
     }
     return fetchEntities<Surfy.Person>(qn);
 }
@@ -236,13 +322,34 @@ export function fetchWorkplacesForBuildingIds(fetchEntities: FetchEntitiesFuncti
 
 export function fetchPeople(fetchEntities: FetchEntitiesFunction) {
     const peopleQn: QueryNodes.Person = {
+        pagination: { limit: 10 },
         name: 'person',
         _: ['id', 'firstname', 'lastname', 'code', 'organizationId', {
             name: 'personSecurityProfile', _: ['id', 'name']
-        }]
+        }, { name: 'workplaceAffectations', _: ['id', { name: 'workplace', _: ['name'] }] }]
     }
     return fetchEntities<Surfy.Person>(peopleQn);
 }
+
+
+export function fetchCostCenter(fetchEntities: FetchEntitiesFunction) {
+    const peopleQn: QueryNodes.CostCenter = {
+        // pagination: { limit: 10 },
+        name: 'costCenter',
+        _: ['id', 'name']
+    }
+    return fetchEntities<Surfy.Person>(peopleQn);
+}
+
+
+// export function fetchRoomSegmentType(fetchEntities: FetchEntitiesFunction) {
+//     const peopleQn: QueryNodes.RoomPointSegmentType = {
+//         pagination: { limit: 2 },
+//         name: 'roomPointSegmentType',
+//         _: ['id']
+//     }
+//     return fetchEntities<Surfy.Person>(peopleQn);
+// }
 
 export function fetchOrganizations(fetchEntities: FetchEntitiesFunction) {
     const organizationQn: QueryNodes.Organization = {
@@ -251,7 +358,6 @@ export function fetchOrganizations(fetchEntities: FetchEntitiesFunction) {
     }
     return fetchEntities<Surfy.Organization>(organizationQn);
 }
-
 
 export function fetchWorkplaceTypes2(fetchEntities: FetchEntitiesFunction) {
     const workplaceTypesQn: QueryNodes.WorkplaceType = {

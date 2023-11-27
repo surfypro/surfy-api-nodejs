@@ -7,7 +7,7 @@ import { createFilter } from "./helper";
 import { saveFloorImage } from "./images/exportFloorImage";
 import { IEntity, IPaginationList, JupQueryNode } from "./jup.models";
 import { Surfy } from "./schema/surfy.models.generated";
-import { fetchAllFloorByLevel, fetchBuildingsWithRoomsAndWorkpaces, fetchFloors2, fetchFloorsAndMapRatioForBuildingIds, fetchItems, fetchItemsForBuildingIds, fetchItemTypes, fetchMainBuildings, fetchMainBuildingWithFloors, fetchMapScaleRatios, fetchOrganizations, fetchPeople, fetchRoomTypes, fetchRoomWithCostCenterId, fetchWorkplaceAffectationsForBuildingIds, fetchWorkplacesForBuildingIds, fetchWorkplaceTypes, fetchWorkplaceTypes2, getPeopleWorkplaces } from "./examples";
+import { fetchAllFloorByLevel, fetchBuildingStructure, fetchBuildingsWithRoomsAndWorkpaces, fetchCostCenter, fetchFloors2, fetchFloorsAndMapRatioForBuildingIds, fetchFloorsStructure, fetchItems, fetchItemsForBuildingIds, fetchItemTypes, fetchMainBuildings, fetchMainBuildingWithFloors, fetchMapScaleRatios, fetchOrganizations, fetchPeople, fetchRoomsStructure, fetchRoomTypes, fetchRoomWithCostCenterId, fetchWorkplaceAffectationsForBuildingIds, fetchWorkplacesForBuildingIds, fetchWorkplaceTypes, fetchWorkplaceTypes2, getOrganization, getPeopleRoomAffectation, getPeopleWorkplaceAffectation, getPeopleWorkplaces } from "./examples";
 import { createPeople } from "./bulk/examples";
 
 dotenv.config();
@@ -68,12 +68,12 @@ async function getBuildings() {
             return r.data;
         }
         // createPeople(createBulk);
-        const people = await getPeopleWorkplaces(fetchEntities);
+        // const people = await getPeopleWorkplaces(fetchEntities);
 
         // fetchWorkplaceTypes(fetchEntities);
         // fetchBuildingsWithRoomsAndWorkpaces(fetchEntities, [123]);
         // fetchAllFloorByLevel(fetchEntities, 0);
-        // fetchRoomTypes(fetchEntities)
+        // fetchRoomTypes(fetchEntities);
         // fetchRoomWithCostCenterId(fetchEntities)
         // fetchItems(fetchEntities)
         // fetchMainBuildingWithFloors(fetchEntities)
@@ -81,6 +81,15 @@ async function getBuildings() {
         // fetchMapScaleRatios(fetchEntities)
         // fetchItemTypes(fetchEntities)
         // fetchPeople(fetchEntities)
+        // fetchCostCenter(fetchEntities);
+        // fetchBuildingStructure(fetchEntities);
+        // fetchFloorsStructure(fetchEntities);
+        // fetchRoomsStructure(fetchEntities);
+
+        getPeopleRoomAffectation(fetchEntities);
+        getPeopleWorkplaceAffectation(fetchEntities);
+        getOrganization(fetchEntities);
+
         // fetchOrganizations(fetchEntities)
         // fetchWorkplaceTypes2(fetchEntities)
 

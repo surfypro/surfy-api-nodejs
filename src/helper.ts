@@ -1,5 +1,6 @@
-import { JupWhereOperator, PropertyTypeJupValues, IJupWhereNode } from "./jup.models";
+import { PropertyTypeJupValues } from "./propertyTypes.values.models";
+import { JupWhereOperator, IJupWhereNode } from "./where.models";
 
-export function createFilter(operator: JupWhereOperator, column: string, value: PropertyTypeJupValues): IJupWhereNode {
+export function createFilter<ScalarPropertyType extends string>(operator: JupWhereOperator, column: ScalarPropertyType, value: PropertyTypeJupValues): IJupWhereNode<ScalarPropertyType> {
     return { operator, column, value };
 }
