@@ -273,7 +273,7 @@ export function getPeopleWorkplaces(fetchEntities: FetchEntitiesFunction) {
     const qn: QueryNodes.Person = {
         name: 'person',
         required: true,
-        _: ['id', 'firstname',
+        _: ['id', 'firstname', 'lastname', 'code', 'organizationId', 'email',
             {
                 name: 'workplaceAffectations', required: true, _: ['id', {
                     name: 'workplace', required: true, _: ['id', 'name', {

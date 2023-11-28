@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IApiAuthorizeBody, IApiAuthorizeResult, IBulkCreateEntitiesBody, IBulkCreateEntitiesResult } from "./models";
 import https from 'https';
 import { IEntity, IPaginationList, JupQueryNode } from "./jup.models";
-import { getOrganization } from "./examples/examples";
+import { getOrganization, getPeopleWorkplaceAffectation, getPeopleWorkplaces } from "./examples/examples";
 import { IApiHelper } from "./api.helper.models";
 import { updateEntity } from "./examples/update";
 import { Surfy } from "./schema/surfy.models.generated";
@@ -59,7 +59,7 @@ async function play() {
             console.log('BODY ENTITIES'.green, JSON.stringify(body))
             try {
                 const r = await instance.post<IPaginationList<T>>(`https://${host}/api/v1/data/entities`, body, config);;
-                console.log(r.data.entities)
+                console.log(r.data.entities?.length)
                 return r.data.entities;
             } catch (err) {
                 console.error('ERROR'.red, err.response.status, err.response?.data?.message || err);
@@ -74,7 +74,9 @@ async function play() {
         }
 
         // createPeople(createBulk);
-        // const people = await getPeopleWorkplaces(fetchEntities);
+        const people = await getPeopleWorkplaces(fetchEntities);
+
+        console.log(people?.filter(p => (p.workplaceAffectations?.totalCount || 0) > 1))
 
         // fetchWorkplaceTypes(fetchEntities);
         // fetchBuildingsWithRoomsAndWorkpaces(fetchEntities, [123]);
@@ -95,17 +97,17 @@ async function play() {
         // getPeopleRoomAffectation(fetchEntities);
         // getPeopleWorkplaceAffectation(fetchEntities);
 
-        const organizations = await getOrganization(fetchEntities);
-        if (organizations && organizations[0]) {
-            const o = organizations[0];
-            console.log(o);
+        // const organizations = await getOrganization(fetchEntities);
+        // if (organizations && organizations[0]) {
+        //     const o = organizations[0];
+        //     console.log(o);
 
-            await updateEntity<Surfy.Organization>(apiHelper)({
-                objectTypeName: 'organization',
-                id: o.id,
-                variables: { ...o, name: 'test name updated' }
-            })
-        }
+        //     await updateEntity<Surfy.Organization>(apiHelper)({
+        //         objectTypeName: 'organization',
+        //         id: o.id,
+        //         variables: { ...o, name: 'test name updated' }
+        //     })
+        // }
         // fetchOrganizations(fetchEntities)
         // fetchWorkplaceTypes2(fetchEntities)
 
