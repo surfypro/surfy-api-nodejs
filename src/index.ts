@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IApiAuthorizeBody, IApiAuthorizeResult, IBulkCreateEntitiesBody, IBulkCreateEntitiesResult } from "./models";
 import https from 'https';
 import { IEntity, IPaginationList, JupQueryNode } from "./jup.models";
-import { getOrganization, getPeopleWorkplaceAffectation, getPeopleWorkplaces } from "./examples/examples";
+import { fetchBuildingStructure, getOrganization, getPeopleRoomAffectation, getPeopleWithRoomAffectation, getPeopleWorkplaceAffectation, getPeopleWorkplaces } from "./examples/examples";
 import { IApiHelper } from "./api.helper.models";
 import { updateEntity } from "./examples/update";
 import { Surfy } from "./schema/surfy.models.generated";
@@ -74,9 +74,8 @@ async function play() {
         }
 
         // createPeople(createBulk);
-        const people = await getPeopleWorkplaces(fetchEntities);
-
-        console.log(people?.filter(p => (p.workplaceAffectations?.totalCount || 0) > 1))
+        // const people = await getPeopleWorkplaces(fetchEntities);
+        // console.log(people?.filter(p => (p.workplaceAffectations?.totalCount || 0) > 1))
 
         // fetchWorkplaceTypes(fetchEntities);
         // fetchBuildingsWithRoomsAndWorkpaces(fetchEntities, [123]);
@@ -91,6 +90,9 @@ async function play() {
         // fetchPeople(fetchEntities)
         // fetchCostCenter(fetchEntities);
         // fetchBuildingStructure(fetchEntities);
+
+        // getPeopleRoomAffectation(fetchEntities);
+        getPeopleWithRoomAffectation(fetchEntities);
         // fetchFloorsStructure(fetchEntities);
         // fetchRoomsStructure(fetchEntities);
 

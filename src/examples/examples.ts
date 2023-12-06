@@ -61,20 +61,20 @@ export function fetchBuildingStructure(fetchEntities: FetchEntitiesFunction) {
         name: 'building',
         filters: [createFilter('eq', 'buildingId', null)],
         _: ['id', 'name',
-            // {
-            //     name: 'floors',
-            //     _: ['id', 'name', 'level',
-            //         {
-            //             name: 'rooms', _: [
-            //                 'id', 'name', 'roomTypeId',
-            //                 { name: 'roomType', _: ['id', 'name'] }
-            //                 // {
-            //                 //     name: 'roomPointRooms', _: ['id', 'sortIndex', { name: 'roomPoint', _: ['id', 'x', 'y'] }]
-            //                 // },
-            //                 // { name: 'workplaces', _: ['id', 'position', 'rotation', 'workplaceTypeId'] }]
-            //             ]
-            //         }]
-            // }
+            {
+                name: 'floors',
+                _: ['id', 'name', 'level',
+                    {
+                        name: 'rooms', _: [
+                            'id', 'name', 'roomTypeId',
+                            { name: 'roomType', _: ['id', 'name'] }
+                            // {
+                            //     name: 'roomPointRooms', _: ['id', 'sortIndex', { name: 'roomPoint', _: ['id', 'x', 'y'] }]
+                            // },
+                            // { name: 'workplaces', _: ['id', 'position', 'rotation', 'workplaceTypeId'] }]
+                        ]
+                    }]
+            }
         ]
     };
     return fetchEntities<Surfy.Building>(qnB);
@@ -260,11 +260,22 @@ export function getOrganization(fetchEntities: FetchEntitiesFunction) {
 export function getPeopleRoomAffectation(fetchEntities: FetchEntitiesFunction) {
     const qn: QueryNodes.RoomAffectation = {
         name: 'roomAffectation',
-        _: ['id', { name: 'room', _: ['name'] }, {
+        _: ['id', { name: 'room', _: ['id', 'name'] }, {
             name: 'person', _: [
                 'id', 'email', 'firstname', 'lastname', 'costCenterId'
             ]
         }]
+    };
+    return fetchEntities<Surfy.RoomAffectation>(qn);
+}
+
+export function getPeopleWithRoomAffectation(fetchEntities: FetchEntitiesFunction) {
+    const qn: QueryNodes.Person = {
+        name: 'person', _: [
+            'id', 'email', 'firstname', 'lastname', 'costCenterId',
+            { name: 'roomAffectations', _: ['roomId'] },
+            { name: 'workplaceAffectations', _: ['workplaceId', { name: 'workplace', _: ['name', 'roomId'] }] }
+        ]
     };
     return fetchEntities<Surfy.RoomAffectation>(qn);
 }
