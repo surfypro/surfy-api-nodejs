@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios';
 import { IApiAuthorizeBody, IApiAuthorizeResult, IBulkCreateEntitiesBody, IBulkCreateEntitiesResult } from "./models";
 import https from 'https';
 import { IEntity, IPaginationList, JupQueryNode } from "./jup.models";
-import { fetchBuildingStructure, getOrganization, getPeopleRoomAffectation, getPeopleWithRoomAffectation, getPeopleWorkplaceAffectation, getPeopleWorkplaces } from "./examples/examples";
+import { fetchBuildingStructure, getOrganization, getPeopleRoomAffectation, getPeopleWithAffectations, getPeopleWorkplaceAffectation, getPeopleWorkplaces } from "./examples/examples";
 import { IApiHelper } from "./api.helper.models";
 import { updateEntity } from "./examples/update";
 import { Surfy } from "./schema/surfy.models.generated";
@@ -92,7 +92,7 @@ async function play() {
         // fetchBuildingStructure(fetchEntities);
 
         // getPeopleRoomAffectation(fetchEntities);
-        getPeopleWithRoomAffectation(fetchEntities);
+        getPeopleWithAffectations(fetchEntities);
         // fetchFloorsStructure(fetchEntities);
         // fetchRoomsStructure(fetchEntities);
 

@@ -269,7 +269,7 @@ export function getPeopleRoomAffectation(fetchEntities: FetchEntitiesFunction) {
     return fetchEntities<Surfy.RoomAffectation>(qn);
 }
 
-export function getPeopleWithRoomAffectation(fetchEntities: FetchEntitiesFunction) {
+export function getPeopleWithAffectations(fetchEntities: FetchEntitiesFunction) {
     const qn: QueryNodes.Person = {
         name: 'person', _: [
             'id', 'email', 'firstname', 'lastname', 'costCenterId',
