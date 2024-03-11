@@ -1,21 +1,28 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { writeFileSync } from "fs";
 
-export async function saveFloorImage(instance: AxiosInstance, config: AxiosRequestConfig, host: string, floorId: number, path: string) {
-    const imageRoute = `https://${host}/api/v1/layout/floor/image/${floorId}/abc.png`;
+
+// quality 0-100
+export async function saveFloorImage(instance: AxiosInstance, config: AxiosRequestConfig, host: string, floorId: number, path: string, quality: number) {
+    const imageRoute = `https://${host}/api/v1/layout/floor/image-2d`;
 
     const image = await instance.post<unknown, AxiosResponse<unknown>>(imageRoute, {
         content: {
             floorId,
+            quality,
             view
         }
-    }, config);
-
-    writeFileSync(path, image.data as any);
+    }, { ...config, responseType: 'arraybuffer' });
+    console.log('path', path);
+    // const data = (image.data as string)?.replace(/^data:image\/\w+;base64,/, "");
+    // const buf = Buffer.from(data, 'base64');
+    // writeFileSync(path, buf);
+    writeFileSync(path, image.data as any, 'binary');
 }
 
 
 const view = {
+
     "loadRoomAffectations": true,
     "colorizeWorkplaces": { "free": false, "flex": false, "shared": false, "transit": false },
     "organizationTab": "level1",

@@ -8,6 +8,7 @@ import { IApiHelper } from "./api.helper.models";
 import { updateEntity } from "./examples/update";
 import { Surfy } from "./schema/surfy.models.generated";
 import colors from "colors";
+import { saveFloorImage } from "./images/exportFloorImage";
 colors.setTheme({
     info: "green"
 });
@@ -73,6 +74,10 @@ async function play() {
             return r.data;
         }
 
+        // const quality = 100;
+        // await saveFloorImage(instance, config, host, 8407, `./../${8407}-${quality}.png`, quality);
+
+
         // createPeople(createBulk);
         // const people = await getPeopleWorkplaces(fetchEntities);
         // console.log(people?.filter(p => (p.workplaceAffectations?.totalCount || 0) > 1))
@@ -92,7 +97,7 @@ async function play() {
         // fetchBuildingStructure(fetchEntities);
 
         // getPeopleRoomAffectation(fetchEntities);
-        getPeopleWithAffectations(fetchEntities);
+        // getPeopleWithAffectations(fetchEntities);
         // fetchFloorsStructure(fetchEntities);
         // fetchRoomsStructure(fetchEntities);
 
@@ -120,6 +125,7 @@ async function play() {
         // fetchItemsForBuildingIds(fetchEntities, buildingIds)
         // fetchWorkplacesForBuildingIds(fetchEntities, buildingIds)
 
+        // ()
 
     } catch (err) {
         console.error(err.response?.status, err.response?.data || err.response || err);
