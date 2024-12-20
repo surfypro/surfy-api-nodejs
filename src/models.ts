@@ -18,8 +18,8 @@ export interface IListEntitiesBody {
 export interface IBulkUpdateEntitiesMixteResult {
     result: boolean;
 }
-export interface IBulkUpdateEntitiesMixteBody {
-    updates: IUpdateEntity<IEntity>[];
+export interface IBulkUpdateEntitiesMixteBody<T extends IEntity> {
+    updates: IUpdateEntity<T>[];
 }
 
 export interface IBulkUpdateEntitiesBody<T extends IEntity> {

@@ -33,6 +33,7 @@ export function fetchWorkplaceTypes(fetchEntities: FetchEntitiesFunction) {
             }
         ]
     }
+    fetchEntities(workplaceTypesQn1);
 }
 
 
@@ -60,7 +61,7 @@ export function fetchBuildingStructure(fetchEntities: FetchEntitiesFunction) {
     const qnB: QueryNodes.Building = {
         name: 'building',
         filters: [createFilter('eq', 'buildingId', null)],
-        _: ['id', 'name',
+        _: ['id', 'name', 'externalId',
             {
                 name: 'floors',
                 _: ['id', 'name', 'level',
