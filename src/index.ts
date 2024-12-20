@@ -12,6 +12,7 @@ import { saveFloorImage } from "./images/exportFloorImage";
 import { QueryNodes } from "./schema/queryNodes.generated";
 import { createFilter } from "./helper";
 import { territoriesExamples } from "./examples/territories/territories.example";
+import { buildingExamples } from "./examples/building/building.examples";
 colors.setTheme({
     info: "green"
 });
@@ -20,9 +21,9 @@ dotenv.config();
 
 async function play() {
     try {
-        // const host = 'app-alpha.surfy.pro';
+        const host = 'app-alpha.surfy.pro';
         // const host = 'localhost';
-        const host = 'app.surfy.pro';
+        // const host = 'app.surfy.pro';
         const clientId = process.env.API_CLIENT_ID; //client id is the tenant
         const clientSecret = process.env.API_CLIENT_SECRET; // generated from the api section on https://app.surfy.pro/
         console.log('clientId', clientId);
@@ -65,7 +66,7 @@ async function play() {
             try {
                 const r = await instance.post<IPaginationList<T>>(`https://${host}/api/v1/data/entities`, body, config);;
                 console.log(r.data.entities?.length)
-                // console.log(r.data.entities)
+                console.log(r.data.entities)
                 return r.data.entities;
             } catch (err) {
                 console.error('ERROR'.red, err.response.status, err.response?.data?.message || err);
@@ -94,7 +95,8 @@ async function play() {
         }
 
 
-        territoriesExamples(fetchEntities);
+        // buildingExamples(fetchEntities)
+        // territoriesExamples(fetchEntities);
         // const quality = 100;
         // await saveFloorImage(instance, config, host, 8407, `./../${8407}-${quality}.png`, quality);
 

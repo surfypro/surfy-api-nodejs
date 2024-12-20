@@ -4,19 +4,22 @@ import { QueryNodes } from "../../schema/queryNodes.generated";
 import { Surfy } from "../../schema/surfy.models.generated";
 import { uniqBy } from 'lodash';
 
+
+// dimensionType = Type of Territory
+
 export async function territoriesExamples(fetchEntities: FetchEntitiesFunction) {
-    const buildingIds = [4219];
-    await getRoomsWithTypes(fetchEntities);
-    await getItems(fetchEntities);
-    const dimensions = await getTerritories(fetchEntities, buildingIds);
-    await fetchListOfPeopleWithTerritories(fetchEntities, dimensions?.map(d => d.id) ?? [], buildingIds);
+    const buildingIds = [2203];
+    // await getRoomsWithTypes(fetchEntities);
+    // await getItems(fetchEntities);
+    const dimensions = await getTerritoriesWithFloors(fetchEntities, buildingIds);
+    // await fetchListOfPeopleWithTerritories(fetchEntities, dimensions?.map(d => d.id) ?? [], buildingIds);
 }
 
 export async function getItems(fetchEntities: FetchEntitiesFunction) {
     const qn: QueryNodes.Item = {
         name: 'item',
-        required:true,
-        _: ['id', 'itemTypeId', 'roomId', {name:'room', _:['id', 'floorId']}, { name: 'itemType',filters: [createFilter('eq', 'code', 'meuble_courrier')], _: ['id', 'name', 'code'], required:true  }]
+        required: true,
+        _: ['id', 'itemTypeId', 'roomId', { name: 'room', _: ['id', 'floorId'] }, { name: 'itemType', filters: [createFilter('eq', 'code', 'meuble_courrier')], _: ['id', 'name', 'code'], required: true }]
     }
     const items = await fetchEntities<Surfy.Item>(qn);
     return items;
@@ -31,32 +34,44 @@ export async function getRoomsWithTypes(fetchEntities: FetchEntitiesFunction) {
     return rooms;
 }
 
-// les calques d'affectations (quartiers) doivent avoin un type de dimension qui est associé à un batiment
-// le bâtiment ne doit pas être un scenario
-async function getTerritories(fetchEntities: FetchEntitiesFunction, buildingIds:number[]) {
-    const typeDeQuartiersQn: QueryNodes.DimensionType = {
+
+const territoryBasedBuildingExternalIds = ['FR_LOCA...'];
+const workplaceBasedBuildingExternalIds = ['FR_LOCA...'];
+const allBuildingExternalIds = [...territoryBasedBuildingExternalIds, ...workplaceBasedBuildingExternalIds];
+
+// const territoryBasedBuildingIds = fetchUsingExternalID()
+
+
+
+async function fetchDimensionTypesForBuilingIds(fetchEntities: FetchEntitiesFunction, buildingIds: number[]) {
+    const dimensionTypeQn: QueryNodes.DimensionType = {
         name: 'dimensionType',
         required: true,
         _: ['id', 'name', {
             name: 'dimensionTypeToBuildings',
             required: true,
-            _: ['id', 'buildingId', 'dimensionTypeId', {
-                name: 'building',
-                filters: [createFilter('is', 'buildingId', null)],
-                required: true,
-                _: ['id', 'name']
-            }]
+            filters: [createFilter('in', 'buildingId', buildingIds)],
+            _: ['id', 'buildingId']
         }]
     }
-    const typeDeQuartiers = await fetchEntities<Surfy.Dimension>(typeDeQuartiersQn);
+    const dimensionTypes = await fetchEntities<Surfy.DimensionType>(dimensionTypeQn);
+    return dimensionTypes;
+}
+// dimensions (Territory) sould have a type de dimension which is associated to the building
+// le bâtiment ne doit pas être un scenario
+async function getTerritoriesWithFloors(fetchEntities: FetchEntitiesFunction, buildingIds: number[]) {
+
+    const dimensionTypes = await fetchDimensionTypesForBuilingIds(fetchEntities, buildingIds);
 
     const qn: QueryNodes.Dimension = {
         name: 'dimension',
         required: true,
-        filters: [createFilter('in', 'dimensionTypeId', typeDeQuartiers?.map(t => t.id) ?? [])],
-        _: ['id', 'name', {
-            name: 'dimensionRooms',required:true, _: ['id', { name: 'room', required:true,_: ['id', { name: 'floor', required:true, filters:[createFilter('in', 'buildingId', buildingIds)] , _: ['id', 'name', 'buildingId'] }] }]
-        }],
+        filters: [createFilter('in', 'dimensionTypeId', dimensionTypes?.map(t => t.id) ?? [])],
+        _: ['id', 'name',
+            {
+                name: 'dimensionRooms', required: true, _: ['id', { name: 'room', required: true, _: ['id', { name: 'floor', required: true, filters: [createFilter('in', 'buildingId', buildingIds)], _: ['id', 'name', 'buildingId'] }] }]
+            }
+        ],
     }
     const territories = await fetchEntities<Surfy.Dimension>(qn);
     if (territories) {
@@ -67,13 +82,13 @@ async function getTerritories(fetchEntities: FetchEntitiesFunction, buildingIds:
 }
 
 // recuperer les personnes avec leurs territoires
-async function fetchListOfPeopleWithTerritories(fetchEntities: FetchEntitiesFunction, dimensionIds: number[], buildingIds:number[]) {
+async function fetchListOfPeopleWithTerritories(fetchEntities: FetchEntitiesFunction, dimensionIds: number[], buildingIds: number[]) {
     const qn: QueryNodes.Person = {
         name: 'person',
         _: ['id', 'firstname', 'lastname',
             // {name:'roomAffectations', _}
             { name: 'dimensionToPeople', _: ['id', 'dimensionId'], filters: [createFilter('in', 'dimensionId', dimensionIds)] },
-            { name: 'workplaceAffectations', _: ['id', 'workplaceId', { name: 'workplace', _: ['id', { name: 'room', required:true, _: ['id', { name: 'floor',filters:[createFilter('in', 'buildingId', buildingIds)],  _: ['id', 'buildingId'] }] }] }] }]
+            { name: 'workplaceAffectations', _: ['id', 'workplaceId', { name: 'workplace', _: ['id', { name: 'room', required: true, _: ['id', { name: 'floor', filters: [createFilter('in', 'buildingId', buildingIds)], _: ['id', 'buildingId'] }] }] }] }]
     }
     const people = await fetchEntities<Surfy.Person>(qn);
     people?.forEach(p => {
