@@ -28,9 +28,9 @@ API_CLIENT_SECRET=<your password>
 build & run the project
 
 ```
-yarn
-yarn dev:build
-yarn dev:start
+pnpm
+pnpm dev:build
+pnpm dev:start
 ```
 
 check file src/index.ts for code sample
